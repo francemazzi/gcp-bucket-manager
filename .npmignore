@@ -1,0 +1,13 @@
+src/
+tsconfig.json
+*.tsbuildinfo
+.git/
+.gitignore
+.env
+.env.local
+key_gcp.json
+.DS_Store
+coverage/
+.nyc_output/
+*.log
+

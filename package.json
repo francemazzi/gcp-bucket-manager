@@ -1,0 +1,39 @@
+{
+  "name": "gcp-bucket-manager",
+  "version": "1.0.0",
+  "description": "A TypeScript library for managing GCP buckets",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "test": "npm run test:integration",
+    "test:integration": "vitest run --config vitest.config.mts --run",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "gcp",
+    "google-cloud",
+    "bucket",
+    "storage"
+  ],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "dotenv": "^17.2.3",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.3.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.8"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^7.17.3"
+  }
+}

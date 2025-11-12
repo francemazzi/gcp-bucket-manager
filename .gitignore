@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+.env
+.env.local
+key_gcp.json
+*.tsbuildinfo
+coverage/
+.nyc_output/
+key_gcp.json
+data_to_test/
