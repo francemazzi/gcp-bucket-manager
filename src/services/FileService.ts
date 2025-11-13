@@ -80,7 +80,7 @@ export class FileService extends BaseStorageService {
         await this.writeFile(blob, file, targetUserId, options.type);
 
         if (options.makePublic ?? this.allowPublicAccess) {
-          await this.ensurePublicReadAccess(bucket, blob);
+          await this.ensurePublicReadAccess(blob);
         }
 
         return this.buildPublicUrl(objectName);
@@ -228,38 +228,13 @@ export class FileService extends BaseStorageService {
     });
   }
 
-  private async ensurePublicReadAccess(
-    bucket = this.getBucket(),
-    blob: File
-  ): Promise<void> {
+  private async ensurePublicReadAccess(blob: File): Promise<void> {
     try {
-      const [policy] = await bucket.iam.getPolicy({
-        requestedPolicyVersion: 3,
-      });
-      policy.version = 3;
-
-      const alreadyPublic = policy.bindings?.some((binding) => {
-        return (
-          binding.role === "roles/storage.objectViewer" &&
-          binding.members?.includes("allUsers")
-        );
-      });
-
-      if (!alreadyPublic) {
-        policy.bindings = policy.bindings ?? [];
-        policy.bindings.push({
-          role: "roles/storage.objectViewer",
-          members: ["allUsers"],
-        });
-
-        await bucket.iam.setPolicy(policy);
-      }
-
       await blob.makePublic();
     } catch (error) {
       if (error instanceof Error) {
         console.warn(
-          `[FileService] Failed to apply public access policy: ${error.message}`
+          `[FileService] Failed to make object public: ${error.message}`
         );
       }
     }

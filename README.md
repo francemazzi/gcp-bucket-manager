@@ -41,7 +41,7 @@ Files are organized in the bucket using a hierarchical structure:
 ### Automatic Features
 
 - **Retry Logic**: Upload operations automatically retry up to 3 times with exponential backoff
-- **Public Access**: Files are automatically made publicly accessible (unless disabled)
+- **Public Access**: Files are automatically made publicly accessible at the object level (unless disabled)
 - **Bucket Validation**: The bucket is validated on startup to ensure it exists and is accessible
 - **Path Sanitization**: User IDs, directories, and filenames are sanitized to ensure valid paths
 
@@ -256,6 +256,13 @@ async function uploadPrivateFile(file: MulterFile) {
   return url;
 }
 ```
+
+### Public Access Considerations
+
+- Object-level ACLs: when `allowPublicAccess` is `true` (default), each uploaded object is made public individually via ACLs without broadcasting bucket-wide permissions.
+- Bucket listing: making individual objects public does **not** expose bucket-level listings; consumers still need the direct object URL.
+- Uniform bucket-level access (UBLA): if your bucket enforces UBLA, Google Cloud disallows object ACLs; uploads will stay private and a warning is logged. Disable UBLA or manage access at the bucket policy level in that scenario.
+- Security posture: review whether sharing permanent public URLs matches your compliance needs. Set `allowPublicAccess: false` or `makePublic: false` per upload to keep objects private and serve them via signed URLs or backend proxies instead.
 
 ## Main Methods
 
